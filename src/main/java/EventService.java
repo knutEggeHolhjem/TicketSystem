@@ -4,12 +4,10 @@ import java.util.stream.Collectors;
 public class EventService
 {
     private EventRepository eventRepository;
-    private TicketRepository ticketRepository;
 
-    public EventService(EventRepository eventRepository, TicketRepository ticketRepository)
+    public EventService(EventRepository eventRepository)
     {
         this.eventRepository = eventRepository;
-        this.ticketRepository = ticketRepository;
     }
 
     public void createEvent(String eventName, String location, String description, int maxNumberOfTickets, int ticketPrice)
@@ -23,6 +21,11 @@ public class EventService
             Event newEvent = new Event(eventName, location, description, maxNumberOfTickets,ticketPrice);
             eventRepository.add(newEvent);
         }
+    }
+
+    public void removeEvent(String eventName)
+    {
+        eventRepository.remove(eventName);
     }
 
     public List<Event> getEvents()

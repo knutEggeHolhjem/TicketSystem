@@ -3,6 +3,7 @@ import java.util.stream.Stream;
 
 public class Event
 {
+    private ArrayList<Ticket> boughtTickets;
     private String name;
     private String location;
     private String description;
@@ -15,6 +16,7 @@ public class Event
         this.description = description;
         this.maxNumberOfTickets = maxNumberOfTickets;
         this.ticketPrice = ticketPrice;
+        boughtTickets = new ArrayList<>();
     }
 
     public String getName() {
@@ -35,6 +37,11 @@ public class Event
 
     public int getTicketPrice() {
         return ticketPrice;
+    }
+
+    public void addTicket(Ticket ticket)
+    {
+        boughtTickets.add(ticket);
     }
 
 

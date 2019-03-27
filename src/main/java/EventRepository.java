@@ -16,6 +16,12 @@ public class EventRepository
         Optional<Event> possibleEvent = events.stream().filter(x -> x.getName().equals(name)).findFirst();
         return possibleEvent.orElse(null);
     }
+
+    public void remove(String name)
+    {
+        events.remove(get(name));
+    }
+
     public Stream<Event> query()
     {
         return events.stream();

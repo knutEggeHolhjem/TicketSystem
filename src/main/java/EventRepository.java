@@ -1,9 +1,10 @@
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class EventRepository
 {
-    private ArrayList<Event> events = new ArrayList<Event>();
+    private ArrayList<Event> events = new ArrayList<>();
 
     public void add(Event event)
     {
@@ -15,5 +16,8 @@ public class EventRepository
         Optional<Event> possibleEvent = events.stream().filter(x -> x.getName().equals(name)).findFirst();
         return possibleEvent.orElse(null);
     }
-
+    public Stream<Event> query()
+    {
+        return events.stream();
+    }
 }

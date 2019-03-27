@@ -8,9 +8,11 @@ public class Main
         String eventName = scanner.nextLine();
         String customerName = scanner.nextLine();
 
-        Event myEvent = new Event(1, eventName);
-        Ticket myTicket = new Ticket(1, myEvent.getEventId(), customerName);
+        EventRepository myEventRepository = new EventRepository();
+        TicketRepository myTicketRepository = new TicketRepository();
 
-        System.out.println("Event: " + myEvent.getName() + " Customer:  " + myTicket.getOwner());
+        EventService eventService = new EventService(myEventRepository, myTicketRepository);
+
+        eventService.createEvent(eventName, "Adal", "FancyParty", 10, 80);
     }
 }

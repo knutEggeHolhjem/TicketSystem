@@ -1,18 +1,41 @@
+import java.util.ArrayList;
+import java.util.stream.Stream;
+
 public class Event
 {
-    private int eventId;
     private String name;
+    private String location;
+    private String description;
+    private int maxNumberOfTickets;
+    private int ticketPrice;
 
-    public Event(int eventId, String name) {
-        this.eventId = eventId;
+    public Event(String name, String location, String description, int maxNumberOfTickets, int ticketPrice) {
         this.name = name;
-    }
-
-    public int getEventId() {
-        return eventId;
+        this.location = location;
+        this.description = description;
+        this.maxNumberOfTickets = maxNumberOfTickets;
+        this.ticketPrice = ticketPrice;
     }
 
     public String getName() {
         return name;
     }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getMaxNumberOfTickets() {
+        return maxNumberOfTickets;
+    }
+
+    public int getTicketPrice() {
+        return ticketPrice;
+    }
+
+
 }

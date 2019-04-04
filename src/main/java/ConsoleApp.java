@@ -16,7 +16,8 @@ public class ConsoleApp
 
     public void start()
     {
-        while (true)
+        boolean exit = false;
+        while (!exit)
         {
             System.out.println("Type 1 to create event:");
             System.out.println("Type 2 to create ticket:");
@@ -24,6 +25,7 @@ public class ConsoleApp
             System.out.println("Type 4 to refund ticket:");
             System.out.println("Type 5 to check if ticket is valid:");
             System.out.println("Type 6 to use ticket:");
+            System.out.println("Type 99 to exit:");
             int input = Integer.parseInt(scanner.nextLine());
 
             switch (input)
@@ -46,6 +48,10 @@ public class ConsoleApp
                 case 6:
                     useTicket();
                     break;
+                case 99:
+                    exit = true;
+                    break;
+
             }
             System.out.println();
         }

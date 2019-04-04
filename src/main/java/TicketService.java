@@ -9,18 +9,21 @@ public class TicketService
         this.payService = payService;
     }
 
-    //Crate ticket and add it to an event if th event has available tickets and payment worked.
+    //Crate ticket and add it to an event if the event has available tickets and payment worked.
     public boolean createTicket(String ownerName, Event event)
     {
         if(event.hasAvailableTicket())
         {
-            Ticket newTicket = new Ticket(event.getName(), ownerName);
-            newTicket.setPrice(event.getTicketPrice());
-            if(payService.payment(ownerName, event.getTicketPrice()))
+            if (event.getTickets().stream().anyMatch(x -> x.getOwner().equals(ownerName)))
             {
-                event.addTicket(newTicket);
-                ticketRepository.add(newTicket);
-                return true;
+                Ticket newTicket = new Ticket(event.getName(), ownerName);
+                newTicket.setPrice(event.getTicketPrice());
+                if (payService.payment(ownerName, event.getTicketPrice()))
+                {
+                    event.addTicket(newTicket);
+                    ticketRepository.add(newTicket);
+                    return true;
+                }
             }
         }
         System.out.println("Can not add ticket to event");
@@ -33,12 +36,14 @@ public class TicketService
         Ticket ticket = getTicket(ownerName);
         if(!ticket.getIsUsed())
         {
-            event.getTickets().remove(ticket);
-            ticketRepository.remove(ticket);
-            payService.returnMoney(ticket.getOwner(), ticket.getPrice());
-            return true;
+            if(payService.returnMoney(ticket.getOwner(), ticket.getPrice()))
+            {
+                event.getTickets().remove(ticket);
+                ticketRepository.remove(ticket);
+                return true;
+            }
         }
-        else return false;
+        return false;
     }
 
     public Ticket getTicket(String name)

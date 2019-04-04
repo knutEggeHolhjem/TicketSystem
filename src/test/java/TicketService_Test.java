@@ -30,16 +30,7 @@ public class TicketService_Test
 
         boolean result = ticketService.createTicket(ticketOwnerName, event);
 
-        if(event != null)
-        {
-            ticket = event.getTickets()
-                    .stream()
-                    .filter(x -> x.getOwner().equals(ticketOwnerName))
-                    .findAny()
-                    .orElse(null);
-        }
-
-        assertTrue(event.getTickets().contains(ticket));
+        assertTrue(event.getTickets().stream().anyMatch(x -> x.getOwner().equals(ticketOwnerName)));
         assertTrue(result);
     }
 
@@ -93,11 +84,10 @@ public class TicketService_Test
         Event event = eventService.getEvent("Name");
 
         ticketService.createTicket(ticketOwnerName, event);
-
         ticketService.refundTicket(ticketOwnerName, event);
 
         assertNull(ticketService.getTicket(ticketOwnerName));
-        assertNull(event.getTickets().stream().filter(x->x.getOwner().equals(ticketOwnerName)).findAny().orElse(null));
+        assertTrue(event.getTickets().stream().anyMatch(x -> x.getOwner().equals(ticketOwnerName)));
     }
 
     @Test

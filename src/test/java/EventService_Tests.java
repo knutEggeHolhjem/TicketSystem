@@ -75,11 +75,7 @@ public class EventService_Tests
     public void check_valid_ticket_returns_true()
     {
         eventService.createEvent("Name", "Location", "Description", 10, 100);
-        Event event  = eventService.getEvents()
-                .stream()
-                .filter(x->x.getName().equals("Name"))
-                .findAny()
-                .orElse(null);
+        Event event = eventService.getEvent("Name");
 
         ticketService.createTicket("TicketOwner", event);
 
@@ -90,11 +86,7 @@ public class EventService_Tests
     public void check_invalid_ticket_returns_false()
     {
         eventService.createEvent("Name", "Location", "Description", 10, 100);
-        Event event  = eventService.getEvents()
-                .stream()
-                .filter(x->x.getName().equals("Name"))
-                .findAny()
-                .orElse(null);
+        Event event = eventService.getEvent("Name");
 
         ticketService.createTicket("TicketOwner", event);
         Ticket ticket = ticketService.getTicket("TicketOwner");
@@ -107,11 +99,7 @@ public class EventService_Tests
     public void using_ticket_changes_ticket_status_to_used()
     {
         eventService.createEvent("Name", "Location", "Description", 10, 100);
-        Event event  = eventService.getEvents()
-                .stream()
-                .filter(x->x.getName().equals("Name"))
-                .findAny()
-                .orElse(null);
+        Event event = eventService.getEvent("Name");
 
         ticketService.createTicket("TicketOwner", event);
 

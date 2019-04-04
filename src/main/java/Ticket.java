@@ -3,6 +3,7 @@ public class Ticket
     private String eventName;
     private String owner;
     private Boolean isUsed;
+    private double price;
 
     public Ticket(String eventName, String owner) {
         this.eventName = eventName;
@@ -28,5 +29,13 @@ public class Ticket
 
     public Boolean getIsUsed() {
         return isUsed;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

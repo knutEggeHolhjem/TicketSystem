@@ -1,7 +1,12 @@
 public class PayService
 {
-    public boolean payment(String customer ,int price)
+    public boolean payment(String customer ,int amount)
     {
-        return price > 50;
+        return amount > 50;
+    }
+
+    public boolean returnMoney(String customer ,int amount)
+    {
+        return amount > 50;
     }
 }

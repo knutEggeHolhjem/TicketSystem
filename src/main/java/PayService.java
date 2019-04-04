@@ -5,7 +5,7 @@ public class PayService
         return amount > 50;
     }
 
-    public boolean returnMoney(String customer ,int amount)
+    public boolean returnMoney(String customer, double amount)
     {
         return amount > 50;
     }

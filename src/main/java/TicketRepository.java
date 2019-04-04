@@ -16,4 +16,9 @@ public class TicketRepository
         Optional<Ticket> possibleTicket = tickets.stream().filter(x -> x.getOwner().equals(name)).findFirst();
         return possibleTicket.orElse(null);
     }
+
+    public void remove(Ticket ticket)
+    {
+        tickets.remove(ticket);
+    }
 }

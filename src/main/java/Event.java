@@ -10,7 +10,7 @@ public class Event
     private String description;
     private int maxNumberOfTickets;
     private int ticketPrice;
-    private Set<Ticket> tickets = new HashSet<Ticket>(0);
+    private Set<Ticket> tickets = new HashSet<>(0);
 
 
     public Event(String name, String location, String description, int maxNumberOfTickets, int ticketPrice) {
@@ -47,7 +47,8 @@ public class Event
         return ticketPrice;
     }
 
-    public Set<Ticket> getTickets() {
+    public Set<Ticket> getTickets()
+    {
         return tickets;
     }
 }

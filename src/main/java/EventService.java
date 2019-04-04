@@ -10,6 +10,7 @@ public class EventService
         this.eventRepository = eventRepository;
     }
 
+    //Creates event using all necessary information, can only create events with unique names.
     public boolean createEvent(String eventName, String location, String description, int maxNumberOfTickets, int ticketPrice)
     {
         if (eventRepository.get(eventName) != null)
@@ -25,6 +26,7 @@ public class EventService
         }
     }
 
+    //The ticket is valid if the event exist, and has a ticket under that name that is not used.
     public boolean checkTicketValid(String eventName, String ticketOwner)
     {
         Ticket ticket = null;
@@ -45,7 +47,8 @@ public class EventService
         else return false;
     }
 
-    public void useTicket(String eventName, String ticketOwner)
+    //Finds an event under that name and a ticket, then sets the ticket to used.
+    public boolean useTicket(String eventName, String ticketOwner)
     {
         Ticket ticket = null;
         Event event = eventRepository.get(eventName);
@@ -63,8 +66,10 @@ public class EventService
             if (ticket != null)
             {
                 ticket.setIsUsed(true);
+                return true;
             }
         }
+        return false;
     }
 
     public void removeEvent(String eventName)

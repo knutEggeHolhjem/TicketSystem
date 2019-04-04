@@ -12,14 +12,13 @@ public class TicketService_Test
 {
     private EventService eventService;
     private TicketService ticketService;
-    private PayService payService;
 
     @Before
     public void setup()
     {
         EventRepository eventRepository = new EventRepository();
         TicketRepository ticketRepository = new TicketRepository();
-        payService = new PayService();
+        PayService payService = new PayService();
         ticketService = new TicketService(ticketRepository, payService);
         eventService = new EventService(eventRepository);
     }

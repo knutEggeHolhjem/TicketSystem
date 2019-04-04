@@ -9,6 +9,7 @@ public class TicketService
         this.payService = payService;
     }
 
+    //Crate ticket and add it to an event if th event has available tickets and payment worked.
     public boolean createTicket(String ownerName, Event event)
     {
         if(event.hasAvailableTicket())
@@ -26,11 +27,18 @@ public class TicketService
         return false;
     }
 
+    //Remove ticket from event and repository then return money if ticket is not used.
     public boolean refundTicket(String ownerName, Event event)
     {
         Ticket ticket = getTicket(ownerName);
-        event.getTickets().remove(ticket);
-        return true;
+        if(!ticket.getIsUsed())
+        {
+            event.getTickets().remove(ticket);
+            ticketRepository.remove(ticket);
+            payService.returnMoney(ticket.getOwner(), ticket.getPrice());
+            return true;
+        }
+        else return false;
     }
 
     public Ticket getTicket(String name)

@@ -21,10 +21,7 @@ public class TicketService
                 return true;
             }
         }
-        else
-        {
-            System.out.println("Can not add ticket to event");
-        }
+        System.out.println("Can not add ticket to event");
         return false;
     }
 

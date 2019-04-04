@@ -23,7 +23,6 @@ public class TicketService_Test
     public void creates_ticket_and_adds_to_event()
     {
         String ticketOwnerName = "TicketOwner";
-        Ticket ticket = null;
         eventService.createEvent("Name", "Location", "Description", 10, 100);
 
         Event event = eventService.getEvent("Name");

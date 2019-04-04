@@ -50,7 +50,7 @@ public class EventService
     //Finds an event under that name and a ticket, then sets the ticket to used.
     public boolean useTicket(String eventName, String ticketOwner)
     {
-        Ticket ticket = null;
+        Ticket ticket;
         Event event = eventRepository.get(eventName);
         if (checkTicketValid(eventName, ticketOwner))
         {
@@ -61,12 +61,12 @@ public class EventService
                         .filter(x -> x.getOwner().equals(ticketOwner))
                         .findAny()
                         .orElse(null);
-            }
 
-            if (ticket != null)
-            {
-                ticket.setIsUsed(true);
-                return true;
+                if (ticket != null)
+                {
+                    ticket.setIsUsed(true);
+                    return true;
+                }
             }
         }
         return false;

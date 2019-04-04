@@ -7,16 +7,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class EventService_Tests
 {
 
     private EventService eventService;
+    private TicketService ticketService;
+    private PayService payService;
 
     @Before
     public void setup()
     {
         EventRepository eventRepository = new EventRepository();
+        TicketRepository ticketRepository = new TicketRepository();
+        payService = new PayService();
+        ticketService = new TicketService(ticketRepository, payService);
         eventService = new EventService(eventRepository);
     }
 
@@ -66,6 +72,38 @@ public class EventService_Tests
                 .collect(Collectors.toList());
 
         assert(!events.contains("Name"));
+    }
+
+    @Test
+    public void check_valid_ticket_returns_true()
+    {
+        eventService.createEvent("Name", "Location", "Description", 10, 100);
+        Event event  = eventService.getEvents()
+                .stream()
+                .filter(x->x.getName().equals("Name"))
+                .findAny()
+                .orElse(null);
+
+        ticketService.createTicket("TicketOwner", event);
+
+        assertTrue(!eventService.checkTicket("Name", "TicketOwner"));
+    }
+
+    @Test
+    public void check_invalid_ticket_returns_false()
+    {
+        eventService.createEvent("Name", "Location", "Description", 10, 100);
+        Event event  = eventService.getEvents()
+                .stream()
+                .filter(x->x.getName().equals("Name"))
+                .findAny()
+                .orElse(null);
+
+        ticketService.createTicket("TicketOwner", event);
+        Ticket ticket = ticketService.getTicket("TicketOwner");
+        ticket.setIsUsed(true);
+
+        assertTrue(eventService.checkTicket("Name", "TicketOwner"));
     }
 
 }

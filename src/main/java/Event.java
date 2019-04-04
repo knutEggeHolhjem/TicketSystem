@@ -42,9 +42,6 @@ public class Event
         return description;
     }
 
-    public int getMaxNumberOfTickets() {
-        return maxNumberOfTickets;
-    }
 
     public int getTicketPrice() {
         return ticketPrice;

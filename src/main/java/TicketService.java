@@ -27,4 +27,9 @@ public class TicketService
         }
         return false;
     }
+
+    public Ticket getTicket(String name)
+    {
+        return ticketRepository.get(name);
+    }
 }

@@ -8,6 +8,7 @@ public class Main
         Scanner scanner = new Scanner(System.in);
         String eventName = scanner.nextLine();
         String customerName = scanner.nextLine();
+        String customerName2 = scanner.nextLine();
 
         EventRepository myEventRepository = new EventRepository();
         TicketRepository myTicketRepository = new TicketRepository();
@@ -25,6 +26,7 @@ public class Main
             if(event.getName().equals("AdalParty"))
             {
                 ticketService.createTicket(customerName,event);
+                ticketService.createTicket(customerName2,event);
             }
         }
 
@@ -35,6 +37,15 @@ public class Main
             {
                 System.out.println("--" + ticket.getOwner());
             }
+        }
+
+        if (eventService.checkTicket(eventName, customerName))
+        {
+            System.out.println("You have a ticket! Yes");
+        }
+        if (!eventService.checkTicket("NotValidEvent", "NotValidTicket"))
+        {
+            System.out.println("Your ticket is not valid :(");
         }
     }
 }

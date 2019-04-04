@@ -48,7 +48,5 @@ public class Main
         {
             System.out.println("Your ticket is not valid :(");
         }
-
-
     }
 }

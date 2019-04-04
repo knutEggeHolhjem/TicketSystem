@@ -10,16 +10,18 @@ public class EventService
         this.eventRepository = eventRepository;
     }
 
-    public void createEvent(String eventName, String location, String description, int maxNumberOfTickets, int ticketPrice)
+    public boolean createEvent(String eventName, String location, String description, int maxNumberOfTickets, int ticketPrice)
     {
         if (eventRepository.get(eventName) != null)
         {
             System.out.println("Event already exist");
+            return false;
         }
         else
         {
             Event newEvent = new Event(eventName, location, description, maxNumberOfTickets,ticketPrice);
             eventRepository.add(newEvent);
+            return true;
         }
     }
 

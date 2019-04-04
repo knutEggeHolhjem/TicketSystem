@@ -12,7 +12,7 @@ public class EventService
 
     public void createEvent(String eventName, String location, String description, int maxNumberOfTickets, int ticketPrice)
     {
-        if (eventRepository.get(eventName) == null)
+        if (eventRepository.get(eventName) != null)
         {
             System.out.println("Event already exist");
         }

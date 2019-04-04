@@ -39,14 +39,16 @@ public class Main
             }
         }
 
-        if (eventService.checkTicket(eventName, customerName))
+        if (eventService.checkTicketValid(eventName, customerName))
         {
             System.out.println("You have a ticket! Yes");
         }
-        if (!eventService.checkTicket("NotValidEvent", "NotValidTicket"))
+        eventService.useTicket(eventName, customerName);
+        if (!eventService.checkTicketValid(eventName, customerName))
         {
             System.out.println("Your ticket is not valid :(");
         }
-        
+
+
     }
 }

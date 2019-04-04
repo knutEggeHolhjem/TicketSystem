@@ -25,7 +25,7 @@ public class EventService
         }
     }
 
-    public boolean checkTicket(String eventName, String ticketOwner)
+    public boolean checkTicketValid(String eventName, String ticketOwner)
     {
         Ticket ticket = null;
         Event event = eventRepository.get(eventName);
@@ -40,9 +40,31 @@ public class EventService
 
         if (ticket != null)
         {
-            return ticket.getIsUsed();
+            return !ticket.getIsUsed();
         }
         else return false;
+    }
+
+    public void useTicket(String eventName, String ticketOwner)
+    {
+        Ticket ticket = null;
+        Event event = eventRepository.get(eventName);
+        if (checkTicketValid(eventName, ticketOwner))
+        {
+            if (event!= null)
+            {
+                ticket = event.getTickets()
+                        .stream()
+                        .filter(x -> x.getOwner().equals(ticketOwner))
+                        .findAny()
+                        .orElse(null);
+            }
+
+            if (ticket != null)
+            {
+                ticket.setIsUsed(true);
+            }
+        }
     }
 
     public void removeEvent(String eventName)

@@ -1,6 +1,4 @@
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -86,7 +84,7 @@ public class EventService_Tests
 
         ticketService.createTicket("TicketOwner", event);
 
-        assertTrue(!eventService.checkTicket("Name", "TicketOwner"));
+        assertTrue(eventService.checkTicketValid("Name", "TicketOwner"));
     }
 
     @Test
@@ -103,7 +101,7 @@ public class EventService_Tests
         Ticket ticket = ticketService.getTicket("TicketOwner");
         ticket.setIsUsed(true);
 
-        assertTrue(eventService.checkTicket("Name", "TicketOwner"));
+        assertTrue(!eventService.checkTicketValid("Name", "TicketOwner"));
     }
 
 }

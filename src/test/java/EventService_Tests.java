@@ -31,7 +31,7 @@ public class EventService_Tests
 
         List<String> events = eventService.getEvents()
                 .stream()
-                .map(x -> x.getName())
+                .map(Event::getName)
                 .collect(Collectors.toList());
 
         assertEquals("Name", String.join(", ", events));
@@ -43,7 +43,6 @@ public class EventService_Tests
     {
         eventService.createEvent("Name", "Location", "Description", 10, 100);
         eventService.createEvent("AdalParty", "Adal", "SickParty", 10, 100);
-        eventService.getEvents().size();
 
         assertEquals(2, eventService.getEvents().size());
     }
@@ -66,7 +65,7 @@ public class EventService_Tests
 
         List<String> events = eventService.getEvents()
                 .stream()
-                .map(x -> x.getName())
+                .map(Event::getName)
                 .collect(Collectors.toList());
 
         assert(!events.contains("Name"));
@@ -103,5 +102,39 @@ public class EventService_Tests
 
         assertTrue(!eventService.checkTicketValid("Name", "TicketOwner"));
     }
+
+    @Test
+    public void using_ticket_changes_ticket_status_to_used()
+    {
+        eventService.createEvent("Name", "Location", "Description", 10, 100);
+        Event event  = eventService.getEvents()
+                .stream()
+                .filter(x->x.getName().equals("Name"))
+                .findAny()
+                .orElse(null);
+
+        ticketService.createTicket("TicketOwner", event);
+
+        eventService.useTicket("Name", "TicketOwner");
+
+        assertTrue(!eventService.checkTicketValid("Name", "TicketOwner"));
+    }
+
+    @Test
+    public void shows_all_available_events()
+    {
+        eventService.createEvent("Name", "Location", "Description", 10, 100);
+        eventService.createEvent("AdalParty", "Adal", "SickParty", 10, 100);
+
+        List<String> events = eventService
+                .getEvents()
+                .stream()
+                .map(Event::getName)
+                .collect(Collectors.toList());
+
+        assertTrue(events.contains("Name"));
+        assertTrue(events.contains("AdalParty"));
+    }
+
 
 }

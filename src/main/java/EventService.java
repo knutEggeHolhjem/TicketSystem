@@ -81,4 +81,13 @@ public class EventService
     {
         return eventRepository.query().collect(Collectors.toList());
     }
+
+    public Event getEvent(String name)
+    {
+        return getEvents()
+                .stream()
+                .filter(x->x.getName().equals(name))
+                .findAny()
+                .orElse(null);
+    }
 }

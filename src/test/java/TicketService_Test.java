@@ -1,10 +1,6 @@
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -30,15 +26,12 @@ public class TicketService_Test
         Ticket ticket = null;
         eventService.createEvent("Name", "Location", "Description", 10, 100);
 
-        Event event  = eventService.getEvents()
-                .stream()
-                .filter(x->x.getName().equals("Name"))
-                .findAny()
-                .orElse(null);
+        Event event = eventService.getEvent("Name");
 
         boolean result = ticketService.createTicket(ticketOwnerName, event);
 
-        if(event != null) {
+        if(event != null)
+        {
             ticket = event.getTickets()
                     .stream()
                     .filter(x -> x.getOwner().equals(ticketOwnerName))
@@ -56,11 +49,7 @@ public class TicketService_Test
         String ticketOwnerName = "TicketOwner";
         eventService.createEvent("Name", "Location", "Description", 10, 100);
 
-        Event event  = eventService.getEvents()
-                .stream()
-                .filter(x->x.getName().equals("Name"))
-                .findAny()
-                .orElse(null);
+        Event event = eventService.getEvent("Name");
 
         boolean result = ticketService.createTicket(ticketOwnerName, event);
 
@@ -74,11 +63,7 @@ public class TicketService_Test
         String ticketOwnerName = "TicketOwner";
         eventService.createEvent("Name", "Location", "Description", 0, 100);
 
-        Event event  = eventService.getEvents()
-                .stream()
-                .filter(x->x.getName().equals("Name"))
-                .findAny()
-                .orElse(null);
+        Event event = eventService.getEvent("Name");
 
         boolean result = ticketService.createTicket(ticketOwnerName, event);
 
@@ -92,14 +77,56 @@ public class TicketService_Test
         String ticketOwnerName = "TicketOwner";
         eventService.createEvent("Name", "Location", "Description", 10, 100);
 
-        Event event  = eventService.getEvents()
-                .stream()
-                .filter(x->x.getName().equals("Name"))
-                .findAny()
-                .orElse(null);
+        Event event = eventService.getEvent("Name");
 
         ticketService.createTicket(ticketOwnerName, event);
 
         assertEquals(ticketOwnerName, ticketService.getTicket(ticketOwnerName).getOwner());
+    }
+
+    @Test
+    public void refund_refundable_ticket()
+    {
+        String ticketOwnerName = "TicketOwner";
+
+        eventService.createEvent("Name", "Location", "Description", 10, 100);
+        Event event = eventService.getEvent("Name");
+
+        ticketService.createTicket(ticketOwnerName, event);
+
+        ticketService.refundTicket(ticketOwnerName, event);
+
+        assertNull(ticketService.getTicket(ticketOwnerName));
+        assertNull(event.getTickets().stream().filter(x->x.getOwner().equals(ticketOwnerName)).findAny().orElse(null));
+    }
+
+    @Test
+    public void nonrefundable_ticket_not_refunded()
+    {
+        String ticketOwnerName = "TicketOwner";
+        Ticket ticket = null;
+
+        eventService.createEvent("Name", "Location", "Description", 10, 100);
+        Event event = eventService.getEvent("Name");
+
+        ticketService.createTicket(ticketOwnerName, event);
+
+        if(event != null) {
+            ticket = event.getTickets()
+                    .stream()
+                    .filter(x -> x.getOwner().equals(ticketOwnerName))
+                    .findAny()
+                    .orElse(null);
+        }
+
+        if (ticket != null)
+        {
+            ticket.setIsUsed(true);
+        }
+
+        ticketService.refundTicket(ticketOwnerName, event);
+
+        assertEquals(ticketOwnerName ,ticketService.getTicket(ticketOwnerName).getOwner());
+        assertEquals(ticketOwnerName ,event.getTickets().stream().filter(x->x.getOwner().equals(ticketOwnerName)).findAny().orElse(null).getOwner());
     }
 }

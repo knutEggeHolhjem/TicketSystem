@@ -12,8 +12,10 @@ public class Main
         EventRepository myEventRepository = new EventRepository();
         TicketRepository myTicketRepository = new TicketRepository();
 
+
+        PayService payService = new PayService();
         EventService eventService = new EventService(myEventRepository);
-        TicketService ticketService = new TicketService(myTicketRepository);
+        TicketService ticketService = new TicketService(myTicketRepository, payService);
 
         eventService.createEvent(eventName, "Adal", "FancyParty", 10, 80);
 

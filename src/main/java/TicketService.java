@@ -14,7 +14,7 @@ public class TicketService
     {
         if(event.hasAvailableTicket())
         {
-            if (event.getTickets().stream().anyMatch(x -> x.getOwner().equals(ownerName)))
+            if (event.getTickets().stream().noneMatch(x -> x.getOwner().equals(ownerName)))
             {
                 Ticket newTicket = new Ticket(event.getName(), ownerName);
                 newTicket.setPrice(event.getTicketPrice());

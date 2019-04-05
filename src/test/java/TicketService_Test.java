@@ -86,7 +86,7 @@ public class TicketService_Test
         ticketService.refundTicket(ticketOwnerName, event);
 
         assertNull(ticketService.getTicket(ticketOwnerName));
-        assertTrue(event.getTickets().stream().anyMatch(x -> x.getOwner().equals(ticketOwnerName)));
+        assertTrue(event.getTickets().stream().noneMatch(x -> x.getOwner().equals(ticketOwnerName)));
     }
 
     @Test

@@ -1,3 +1,6 @@
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 
@@ -55,10 +58,13 @@ public class OrganizerUI
         System.out.println("What is your events max number of participants: ");
         int eventMaxNumberOfTickets = Integer.parseInt(scanner.nextLine());
 
+        System.out.println("How many days is it until your event starts: ");
+        int daysUntilStart= Integer.parseInt(scanner.nextLine());
+
         System.out.println("Input a price for your events tickets: ");
         int eventTicketPrice = Integer.parseInt(scanner.nextLine());
 
-        if (eventService.createEvent(eventName, eventLocation, eventDescription, eventMaxNumberOfTickets, eventTicketPrice))
+        if (eventService.createEvent(eventName, eventLocation, eventDescription, eventMaxNumberOfTickets, eventTicketPrice, daysUntilStart))
         {
             System.out.println("Your event was created successfully.\nThank you for using our service.");
         }
@@ -75,9 +81,15 @@ public class OrganizerUI
         } else {
             System.out.println("Number of available events: " + availableEvents.size());
             for (Event event : availableEvents) {
-                System.out.println("-" + event.getName());
-                for (Ticket ticket : event.getTickets()) {
-                    System.out.println("--" + ticket.getOwner());
+                if(!event.hasEventStarted(System.currentTimeMillis())) { //Event doesn't show up in list if it has already started
+                    Calendar start = event.getStartDate();
+                    DateFormat df = new SimpleDateFormat("dd:MM:yyyy");
+                    System.out.println("-" + event.getName() + ", Date of event: " +df.format(start.getTime()) );
+                    for (Ticket ticket : event.getTickets()) {
+                        System.out.println("--" + ticket.getOwner());
+                    }
+                } else {
+                    System.out.println("-" + event.getName() + ", Date of event: ENDED");
                 }
             }
         }

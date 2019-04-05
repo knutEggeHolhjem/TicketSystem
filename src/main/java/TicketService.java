@@ -12,6 +12,10 @@ public class TicketService
     //Crate ticket and add it to an event if the event has available tickets and payment worked.
     public boolean createTicket(String ownerName, Event event)
     {
+        if(event.hasEventStarted(System.currentTimeMillis())){
+            System.out.println("Event has already started, can't make a ticket for this event");
+            return false;
+        }
         if(event.hasAvailableTicket())
         {
             if (event.getTickets().stream().noneMatch(x -> x.getOwner().equals(ownerName)))

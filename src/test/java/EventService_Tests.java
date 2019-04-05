@@ -27,7 +27,7 @@ public class EventService_Tests
     @Test
     public void creates_event()
     {
-        boolean created = eventService.createEvent("Name", "Location", "Description", 10, 100);
+        boolean created = eventService.createEvent("Name", "Location", "Description", 10, 100, 10);
 
         List<String> events = eventService.getEvents()
                 .stream()
@@ -41,8 +41,8 @@ public class EventService_Tests
     @Test
     public void creates_multiple_events()
     {
-        eventService.createEvent("Name", "Location", "Description", 10, 100);
-        eventService.createEvent("AdalParty", "Adal", "SickParty", 10, 100);
+        eventService.createEvent("Name", "Location", "Description", 10, 100, 10);
+        eventService.createEvent("AdalParty", "Adal", "SickParty", 10, 100, 10);
 
         assertEquals(2, eventService.getEvents().size());
     }
@@ -50,8 +50,8 @@ public class EventService_Tests
     @Test
     public void does_not_create_new_event_when_one_exist()
     {
-        eventService.createEvent("Name", "Location", "Description", 10, 100);
-        boolean created = eventService.createEvent("Name", "Location", "Description", 10, 100);
+        eventService.createEvent("Name", "Location", "Description", 10, 100, 10);
+        boolean created = eventService.createEvent("Name", "Location", "Description", 10, 100, 10);
 
         assert(!created);
         assertEquals(1, eventService.getEvents().size());
@@ -60,7 +60,7 @@ public class EventService_Tests
     @Test
     public void removes_event()
     {
-        eventService.createEvent("Name", "Location", "Description", 10, 100);
+        eventService.createEvent("Name", "Location", "Description", 10, 100, 10);
         eventService.removeEvent("Name");
 
         List<String> events = eventService.getEvents()
@@ -74,7 +74,7 @@ public class EventService_Tests
     @Test
     public void check_valid_ticket_returns_true()
     {
-        eventService.createEvent("Name", "Location", "Description", 10, 100);
+        eventService.createEvent("Name", "Location", "Description", 10, 100, 10);
         Event event = eventService.getEvent("Name");
 
         ticketService.createTicket("TicketOwner", event);
@@ -85,7 +85,7 @@ public class EventService_Tests
     @Test
     public void check_invalid_ticket_returns_false()
     {
-        eventService.createEvent("Name", "Location", "Description", 10, 100);
+        eventService.createEvent("Name", "Location", "Description", 10, 100, 10);
         Event event = eventService.getEvent("Name");
 
         ticketService.createTicket("TicketOwner", event);
@@ -98,7 +98,7 @@ public class EventService_Tests
     @Test
     public void using_ticket_changes_ticket_status_to_used()
     {
-        eventService.createEvent("Name", "Location", "Description", 10, 100);
+        eventService.createEvent("Name", "Location", "Description", 10, 100, 10);
         Event event = eventService.getEvent("Name");
 
         ticketService.createTicket("TicketOwner", event);
@@ -109,10 +109,36 @@ public class EventService_Tests
     }
 
     @Test
+    public void event_shows_when_ended(){
+        eventService.createEvent("Name", "Location", "Description", 10, 100, 10);
+        Event event = eventService.getEvent("Name");
+
+        long dateIn11Days = System.currentTimeMillis() + 11*24*60*60*1000;
+
+        assertTrue(event.hasEventStarted(dateIn11Days));
+    }
+
+    @Test
+    public void cant_create_ticket_when_event_has_ended(){
+        eventService.createEvent("Name", "Location", "Description", 10, 100, -1); //event ended yesterday
+        Event event = eventService.getEvent("Name");
+
+        assertTrue(!ticketService.createTicket("TicketOwner", event));
+    }
+
+    @Test
+    public void can_create_ticket_when_event_hasnt_started(){
+        eventService.createEvent("Name", "Location", "Description", 10, 100, 10); //event starts in 10 days
+        Event event = eventService.getEvent("Name");
+
+        assertTrue(ticketService.createTicket("TicketOwner", event));
+    }
+
+    @Test
     public void shows_all_available_events()
     {
-        eventService.createEvent("Name", "Location", "Description", 10, 100);
-        eventService.createEvent("AdalParty", "Adal", "SickParty", 10, 100);
+        eventService.createEvent("Name", "Location", "Description", 10, 100, 10);
+        eventService.createEvent("AdalParty", "Adal", "SickParty", 10, 100, 10);
 
         List<String> events = eventService
                 .getEvents()

@@ -1,3 +1,6 @@
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,7 +26,7 @@ public class CustomerUI
             System.out.println("Type 3 to refund a ticket:");
             System.out.println("Type 4 to check if a ticket is valid:");
             System.out.println("Type 5 to use a ticket:");
-            System.out.println("Type 99 to exit to main menu:");
+            System.out.println("Type 99 to go back to the main menu:");
             int input = Integer.parseInt(scanner.nextLine());
 
             switch (input)
@@ -58,7 +61,11 @@ public class CustomerUI
         System.out.println("Available events:");
         for (Event event : availableEvents)
         {
-            System.out.println("-" + event.getName());
+            if(!event.hasEventStarted(System.currentTimeMillis())) { //Event doesn't show up in ticket creation list if it has already started
+                Calendar start = event.getStartDate();
+                DateFormat df = new SimpleDateFormat("dd:MM:yyyy");
+                System.out.println("-" + event.getName() + ", Date of event: " +df.format(start.getTime()) );
+            }
         }
 
         System.out.println("Select an event by writing the events name:");
@@ -71,7 +78,10 @@ public class CustomerUI
         {
             if (event.getName().equals(eventToPurchaseTicket))
             {
-                if (ticketService.createTicket(customerName, event))
+                if(event.hasEventStarted(System.currentTimeMillis())){
+                    System.out.println("That event has already started or has already ended, so you can't buy a ticket for that event");
+                }
+                else if (ticketService.createTicket(customerName, event))
                 {
                     System.out.println("Ticket created successfully");
                 }
@@ -119,9 +129,15 @@ public class CustomerUI
         } else {
             System.out.println("Number of available events: " + availableEvents.size());
             for (Event event : availableEvents) {
-                System.out.println("-" + event.getName());
-                for (Ticket ticket : event.getTickets()) {
-                    System.out.println("--" + ticket.getOwner());
+                if(!event.hasEventStarted(System.currentTimeMillis())) { //Event doesn't show up in list if it has already started
+                    Calendar start = event.getStartDate();
+                    DateFormat df = new SimpleDateFormat("dd:MM:yyyy");
+                    System.out.println("-" + event.getName() + ", Date of event: " +df.format(start.getTime()) );
+                    for (Ticket ticket : event.getTickets()) {
+                        System.out.println("--" + ticket.getOwner());
+                    }
+                } else {
+                    System.out.println("-" + event.getName() + ", Date of event: ENDED");
                 }
             }
         }

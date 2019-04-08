@@ -33,7 +33,7 @@ public class OrganizerUI
                     createEvent();
                     break;
                 case 2:
-                    viewEventsAndParticipants();
+                    ConsoleApp.viewEventsAndParticipants(eventService.getEvents());
                     break;
                 case 99:
                     exit = true;
@@ -55,6 +55,12 @@ public class OrganizerUI
         System.out.println("Enter a description of your event: ");
         String eventDescription = scanner.nextLine();
 
+        System.out.println("Enter a bank account number of your event: ");
+        String bank = scanner.nextLine();
+
+        System.out.println("Enter a contact email for your event: ");
+        String email = scanner.nextLine();
+
         System.out.println("What is your events max number of participants: ");
         int eventMaxNumberOfTickets = Integer.parseInt(scanner.nextLine());
 
@@ -64,34 +70,13 @@ public class OrganizerUI
         System.out.println("Input a price for your events tickets: ");
         int eventTicketPrice = Integer.parseInt(scanner.nextLine());
 
-        if (eventService.createEvent(eventName, eventLocation, eventDescription, eventMaxNumberOfTickets, eventTicketPrice, daysUntilStart))
+        if (eventService.createEvent(eventName, eventLocation, eventDescription, eventMaxNumberOfTickets, eventTicketPrice, daysUntilStart, bank, email))
         {
             System.out.println("Your event was created successfully.\nThank you for using our service.");
         }
         else
         {
             System.out.println("Something went wrong when creating your event :( \nTry again later");
-        }
-    }
-
-    private void viewEventsAndParticipants() {
-        List<Event> availableEvents = eventService.getEvents();
-        if (availableEvents.isEmpty()) {
-            System.out.println("There are no available events: try again later, or make your own");
-        } else {
-            System.out.println("Number of available events: " + availableEvents.size());
-            for (Event event : availableEvents) {
-                if(!event.hasEventStarted(System.currentTimeMillis())) { //Event doesn't show up in list if it has already started
-                    Calendar start = event.getStartDate();
-                    DateFormat df = new SimpleDateFormat("dd:MM:yyyy");
-                    System.out.println("-" + event.getName() + ", Date of event: " +df.format(start.getTime()) );
-                    for (Ticket ticket : event.getTickets()) {
-                        System.out.println("--" + ticket.getOwner());
-                    }
-                } else {
-                    System.out.println("-" + event.getName() + ", Date of event: ENDED");
-                }
-            }
         }
     }
 

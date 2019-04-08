@@ -10,7 +10,6 @@ public class Main
 
         //PayService is a simple service to do some payment things with.
         PayService payService = new PayService();
-
         //Event service is used to do things with events like creating.
         EventService eventService = new EventService(myEventRepository);
 

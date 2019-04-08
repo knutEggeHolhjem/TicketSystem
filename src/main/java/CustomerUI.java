@@ -1,3 +1,4 @@
+import javax.mail.MessagingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,7 +36,7 @@ public class CustomerUI
                     createTicket();
                     break;
                 case 2:
-                    viewEventsAndParticipants();
+                    ConsoleApp.viewEventsAndParticipants(eventService.getEvents());
                     break;
                 case 3:
                     refundTicket();
@@ -74,22 +75,51 @@ public class CustomerUI
         System.out.println("Input your name: ");
         String customerName = scanner.nextLine();
 
-        for (Event event : availableEvents)
-        {
-            if (event.getName().equals(eventToPurchaseTicket))
-            {
-                if(event.hasEventStarted(System.currentTimeMillis())){
-                    System.out.println("That event has already started or has already ended, so you can't buy a ticket for that event");
-                }
-                else if (ticketService.createTicket(customerName, event))
-                {
-                    System.out.println("Ticket created successfully");
-                }
-                else
-                {
-                    System.out.println("Something went wrong when creating the ticket :(\nTry again later");
+        System.out.println("Input your email: ");
+        String customerEmail = scanner.nextLine();
+
+
+        System.out.println("\nAre you sure you want to buy a ticket to event:" +
+                "\n  " + eventToPurchaseTicket +
+                "\nUnder the name of: " +
+                "\n  " + customerName +
+                "\nWith the email: " +
+                "\n  " + customerEmail +"?");
+        while(true) {
+            System.out.println("(Answer \"y\" for yes, or \"n\" for no)");
+            String confirmation = scanner.nextLine();
+
+            if (confirmation.equals("n")){
+                System.out.println("Thank you for using our service,\nif you change your mind please come back and try again");
+                break;
+            } else if(!confirmation.equals("y")){
+                System.out.println("Sorry I dont understand that, please try again:");
+                continue;
+            } else{
+                System.out.println("Do you want the ticket sent to your email? \n(y or n to answer)");
+                String sendEmail = scanner.nextLine();
+                if(sendEmail.equals("y")){
+                    try {
+                        Mail.sendMail(customerEmail, customerName, eventToPurchaseTicket);
+                    }catch(MessagingException e){
+                        System.out.println("Something went wrong with the email, so it wasn't sent");
+                    }
                 }
             }
+
+                for (Event event : availableEvents) {
+                    if (event.getName().equals(eventToPurchaseTicket)) {
+                        if (event.hasEventStarted(System.currentTimeMillis())) {
+                            System.out.println("That event has already started or has already ended, so you can't buy a ticket for that event");
+                        } else if (ticketService.createTicket(customerName, event, customerEmail)) {
+                            System.out.println("Ticket created successfully" +
+                                    "\nCheck your email for confirmation");
+                        } else {
+                            System.out.println("Something went wrong when creating the ticket :(\nTry again later");
+                        }
+                    }
+                }
+                break;
         }
     }
 
@@ -117,27 +147,6 @@ public class CustomerUI
                 else
                 {
                     System.out.println("The ticket you specified was not valid for a refund");
-                }
-            }
-        }
-    }
-
-    private void viewEventsAndParticipants() {
-        List<Event> availableEvents = eventService.getEvents();
-        if (availableEvents.isEmpty()) {
-            System.out.println("There are no available events: try again later, or make your own");
-        } else {
-            System.out.println("Number of available events: " + availableEvents.size());
-            for (Event event : availableEvents) {
-                if(!event.hasEventStarted(System.currentTimeMillis())) { //Event doesn't show up in list if it has already started
-                    Calendar start = event.getStartDate();
-                    DateFormat df = new SimpleDateFormat("dd:MM:yyyy");
-                    System.out.println("-" + event.getName() + ", Date of event: " +df.format(start.getTime()) );
-                    for (Ticket ticket : event.getTickets()) {
-                        System.out.println("--" + ticket.getOwner());
-                    }
-                } else {
-                    System.out.println("-" + event.getName() + ", Date of event: ENDED");
                 }
             }
         }

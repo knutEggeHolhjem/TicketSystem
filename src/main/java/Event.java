@@ -9,11 +9,14 @@ public class Event
     private Long dateOfCreation;
     private Long msUntilStart; //from date of creation
     private int maxNumberOfTickets;
+    private int availableTickets;
     private int ticketPrice;
+    private String organizerContactEmail;
+    private String organizerBankAccount;
     private Set<Ticket> tickets = new HashSet<>(0);
 
 
-    public Event(String name, String location, String description, int maxNumberOfTickets, int ticketPrice, int daysUntilStart) {
+    public Event(String name, String location, String description, int maxNumberOfTickets, int ticketPrice, int daysUntilStart, String organizerBankAccount, String organizerContactEmail) {
         this.name = name;
         this.location = location;
         this.description = description;
@@ -21,6 +24,8 @@ public class Event
         this.ticketPrice = ticketPrice;
         this.dateOfCreation = System.currentTimeMillis();
         this.msUntilStart = (long) daysUntilStart*24*60*60*1000;
+        this.organizerBankAccount = organizerBankAccount; //you add it, but it doesnt really do anything yet
+        this.organizerContactEmail = organizerContactEmail; //you add it, but it doesnt really do anything yet
     }
 
     public void addTicket(Ticket ticket) {
@@ -68,5 +73,25 @@ public class Event
     public Set<Ticket> getTickets()
     {
         return tickets;
+    }
+
+    public String getOrganizerContactEmail() {
+        return organizerContactEmail;
+    }
+
+    public void setOrganizerContactEmail(String organizerContactEmail) {
+        this.organizerContactEmail = organizerContactEmail;
+    }
+
+    public String getOrganizerBankAccount() {
+        return organizerBankAccount;
+    }
+
+    public void setOrganizerBankAccount(String organizerBankAccount) {
+        this.organizerBankAccount = organizerBankAccount;
+    }
+
+    public int getNumberOfLeftOverTickets(){
+        return maxNumberOfTickets-tickets.size();
     }
 }

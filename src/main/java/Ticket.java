@@ -2,6 +2,7 @@ public class Ticket
 {
     private String eventName;
     private String owner;
+    private String ownerEmail;
     private Boolean isUsed;
     private double price;
 
@@ -21,6 +22,14 @@ public class Ticket
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getOwnerEmail() {
+        return ownerEmail;
+    }
+
+    public void setOwnerEmail(String ownerEmail) {
+        this.ownerEmail = ownerEmail;
     }
 
     public void setIsUsed(Boolean isUsed) {

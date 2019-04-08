@@ -23,11 +23,11 @@ public class TicketService_Test
     public void creates_ticket_and_adds_to_event()
     {
         String ticketOwnerName = "TicketOwner";
-        eventService.createEvent("Name", "Location", "Description", 10, 100, 10);
+        eventService.createEvent("Name", "Location", "Description", 10, 100, 10,"","");
 
         Event event = eventService.getEvent("Name");
 
-        boolean result = ticketService.createTicket(ticketOwnerName, event);
+        boolean result = ticketService.createTicket(ticketOwnerName, event,"");
 
         assertTrue(event.getTickets().stream().anyMatch(x -> x.getOwner().equals(ticketOwnerName)));
         assertTrue(result);
@@ -37,11 +37,11 @@ public class TicketService_Test
     public void creates_ticket()
     {
         String ticketOwnerName = "TicketOwner";
-        eventService.createEvent("Name", "Location", "Description", 10, 100, 10);
+        eventService.createEvent("Name", "Location", "Description", 10, 100, 10,"","");
 
         Event event = eventService.getEvent("Name");
 
-        boolean result = ticketService.createTicket(ticketOwnerName, event);
+        boolean result = ticketService.createTicket(ticketOwnerName, event,"");
 
         assertNotNull(ticketService.getTicket(ticketOwnerName));
         assertTrue(result);
@@ -51,11 +51,11 @@ public class TicketService_Test
     public void does_not_crate_ticket_when_event_has_no_available_tickets()
     {
         String ticketOwnerName = "TicketOwner";
-        eventService.createEvent("Name", "Location", "Description", 0, 100, 10);
+        eventService.createEvent("Name", "Location", "Description", 0, 100, 10,"","");
 
         Event event = eventService.getEvent("Name");
 
-        boolean result = ticketService.createTicket(ticketOwnerName, event);
+        boolean result = ticketService.createTicket(ticketOwnerName, event,"");
 
         assertNull(ticketService.getTicket(ticketOwnerName));
         assertTrue(!result);
@@ -65,11 +65,11 @@ public class TicketService_Test
     public void getTicket_shows_existing_ticket()
     {
         String ticketOwnerName = "TicketOwner";
-        eventService.createEvent("Name", "Location", "Description", 10, 100, 10);
+        eventService.createEvent("Name", "Location", "Description", 10, 100, 10,"","");
 
         Event event = eventService.getEvent("Name");
 
-        ticketService.createTicket(ticketOwnerName, event);
+        ticketService.createTicket(ticketOwnerName, event,"");
 
         assertEquals(ticketOwnerName, ticketService.getTicket(ticketOwnerName).getOwner());
     }
@@ -79,10 +79,10 @@ public class TicketService_Test
     {
         String ticketOwnerName = "TicketOwner";
 
-        eventService.createEvent("Name", "Location", "Description", 10, 100, 10);
+        eventService.createEvent("Name", "Location", "Description", 10, 100, 10,"","");
         Event event = eventService.getEvent("Name");
 
-        ticketService.createTicket(ticketOwnerName, event);
+        ticketService.createTicket(ticketOwnerName, event,"");
         ticketService.refundTicket(ticketOwnerName, event);
 
         assertNull(ticketService.getTicket(ticketOwnerName));
@@ -95,10 +95,10 @@ public class TicketService_Test
         String ticketOwnerName = "TicketOwner";
         Ticket ticket = null;
 
-        eventService.createEvent("Name", "Location", "Description", 10, 100, 10);
+        eventService.createEvent("Name", "Location", "Description", 10, 100, 10,"","");
         Event event = eventService.getEvent("Name");
 
-        ticketService.createTicket(ticketOwnerName, event);
+        ticketService.createTicket(ticketOwnerName, event,"");
 
         if(event != null) {
             ticket = event.getTickets()
@@ -118,4 +118,6 @@ public class TicketService_Test
         assertEquals(ticketOwnerName ,ticketService.getTicket(ticketOwnerName).getOwner());
         assertEquals(ticketOwnerName ,event.getTickets().stream().filter(x->x.getOwner().equals(ticketOwnerName)).findAny().orElse(null).getOwner());
     }
+
+
 }

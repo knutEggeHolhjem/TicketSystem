@@ -11,7 +11,7 @@ public class EventService
     }
 
     //Creates event using all necessary information, can only create events with unique names.
-    public boolean createEvent(String eventName, String location, String description, int maxNumberOfTickets, int ticketPrice, int daysUntilStart)
+    public boolean createEvent(String eventName, String location, String description, int maxNumberOfTickets, int ticketPrice, int daysUntilStart, String ownerBank, String ownerEmail)
     {
         if (eventRepository.get(eventName) != null)
         {
@@ -20,7 +20,7 @@ public class EventService
         }
         else
         {
-            Event newEvent = new Event(eventName, location, description, maxNumberOfTickets,ticketPrice,daysUntilStart);
+            Event newEvent = new Event(eventName, location, description, maxNumberOfTickets, ticketPrice, daysUntilStart, ownerBank, ownerEmail);
             eventRepository.add(newEvent);
             return true;
         }

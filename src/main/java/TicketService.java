@@ -1,3 +1,5 @@
+
+
 public class TicketService
 {
     private TicketRepository ticketRepository;
@@ -9,8 +11,8 @@ public class TicketService
         this.payService = payService;
     }
 
-    //Crate ticket and add it to an event if the event has available tickets and payment worked.
-    public boolean createTicket(String ownerName, Event event)
+    //Create ticket and add it to an event if the event has available tickets and payment worked.
+    public boolean createTicket(String ownerName, Event event, String ownerEmail)
     {
         if(event.hasEventStarted(System.currentTimeMillis())){
             System.out.println("Event has already started, can't make a ticket for this event");
@@ -21,6 +23,7 @@ public class TicketService
             if (event.getTickets().stream().noneMatch(x -> x.getOwner().equals(ownerName)))
             {
                 Ticket newTicket = new Ticket(event.getName(), ownerName);
+                newTicket.setOwnerEmail(ownerEmail);
                 newTicket.setPrice(event.getTicketPrice());
                 if (payService.payment(ownerName, event.getTicketPrice()))
                 {
